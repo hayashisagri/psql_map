@@ -6,7 +6,7 @@ from urllib import request
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import (
     CreateView,
@@ -21,7 +21,6 @@ from prefecture.models import PREFECTURES_CODE, Prefecture, Review
 
 
 class HomeView(TemplateView):
-
     template_name = "prefecture/home.html"
 
 
@@ -89,15 +88,10 @@ class CreateReviewView(LoginRequiredMixin, CreateView):
         )
 
 
-class UpdateReviewView(UpdateView):
+class UpdateReviewView(LoginRequiredMixin, UpdateView):
     model = Review
     fields = ("title", "text", "rate", "image")
     template_name = "prefecture/review_update.html"
-
-    # def form_valid(self, form):
-    #     if form.instance.image == None:
-    #         form.instance.image = "no_image.png"
-    #     return super().form_valid(form)
 
     def get_success_url(self):
         return reverse(
@@ -105,7 +99,7 @@ class UpdateReviewView(UpdateView):
         )
 
 
-class DeleteReviewView(DeleteView):
+class DeleteReviewView(LoginRequiredMixin, DeleteView):
     template_name = "prefecture/review_confirm_delete.html"
     model = Review
 
@@ -114,6 +108,9 @@ class DeleteReviewView(DeleteView):
             "prefecture-detail", kwargs={"pk": self.object.prefecture.id}
         )
 
+
+def root_view(request):
+    return redirect('home')
 
 @login_required
 def mypage_view(request):
