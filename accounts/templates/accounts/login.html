@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}ログイン{% endblock title %}
+{% block h1 %}ログイン{% endblock h1 %}
+{% block content %}
+    <form method="post" class="p-4 m-4 bg-light border border-warning rounded form-group">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}" />
+        <input type="text" name="email" class="form-control my-4" placeholder="email">
+        <input type="password" name="password" class="form-control mt-4" placeholder="パスワード">
+        {% if form.errors %}
+            <span class="mb-2 small text-danger d-block text-start">{{ form.error_messages.invalid_login }}</span>
+        {% endif %}
+        <button type="submit" class="btn btn-warning m-2">ログイン</button>
+    </form>
+{% endblock %}
