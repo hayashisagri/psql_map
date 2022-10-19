@@ -1,6 +1,5 @@
 import copy
 import json
-from email.mime import image
 from urllib import request
 
 from django.contrib.auth.decorators import login_required
@@ -112,6 +111,7 @@ class DeleteReviewView(LoginRequiredMixin, DeleteView):
 def root_view(request):
     return redirect('home')
 
+
 @login_required
 def mypage_view(request):
     visited_list = Prefecture.objects.filter(user=request.user)
@@ -127,19 +127,15 @@ def mypage_view(request):
 
     for vl in visited_list:
         un_visited_list.remove(str(vl))
-        i = 1
-        while i <= NUM_ALL_PREFECTURES:
+        for i in range(1, NUM_ALL_PREFECTURES):
             i_str = str(i)
             if str(vl) == visit_dict[i_str]:
                 visit_dict[i_str] = 1
-            i += 1
 
-    i = 1
-    while i <= NUM_ALL_PREFECTURES:
+    for i in range(1, NUM_ALL_PREFECTURES):
         i_str = str(i)
         if visit_dict[i_str] != 1:
             visit_dict[i_str] = 0
-        i += 1
 
     prefecture_colour_data = json.dumps(visit_dict)
 
