@@ -1,6 +1,5 @@
 import copy
 import json
-from urllib import request
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -16,6 +15,7 @@ from django.views.generic import (
 )
 
 from prefecture.consts import NUM_ALL_PREFECTURES
+from prefecture.forms import ReviewForm
 from prefecture.models import PREFECTURES_CODE, Prefecture, Review
 
 
@@ -64,9 +64,8 @@ class DeletePrefectureView(LoginRequiredMixin, DeleteView):
 
 
 class CreateReviewView(LoginRequiredMixin, CreateView):
-    model = Review
-    fields = ("prefecture", "title", "text", "rate", "image")
     template_name = "prefecture/review_form.html"
+    form_class = ReviewForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -77,7 +76,7 @@ class CreateReviewView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        if form.instance.image is None:
+        if not bool(form.instance.image):
             form.instance.image = "no_image.png"
         return super().form_valid(form)
 

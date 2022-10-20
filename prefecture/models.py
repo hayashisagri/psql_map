@@ -106,11 +106,12 @@ PREFECTURES_CODE = [
 
 
 class Prefecture(models.Model):
-    name = models.CharField(verbose_name="都道府県",choices=PREFECTURES, max_length=10)
+    name = models.CharField(verbose_name="都道府県", choices=PREFECTURES, max_length=10)
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
+
 
 class Review(models.Model):
     prefecture = models.ForeignKey(Prefecture, on_delete=models.CASCADE)
