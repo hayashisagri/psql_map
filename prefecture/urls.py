@@ -12,4 +12,6 @@ urlpatterns = [
     path("prefecture/<int:prefecture_id>/review/", views.CreateReviewView.as_view(), name="review"),
     path("review/<int:pk>/delete/", views.DeleteReviewView.as_view(), name="delete-review"),
     path("review/<int:pk>/update/", views.UpdateReviewView.as_view(), name="update-review"),
+
+    path("api/prefectures/", views.prefecture_list, name="prefecture-list")
 ]

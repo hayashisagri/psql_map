@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "prefecture.apps.PrefectureConfig",
     "accounts.apps.AccountsConfig",
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

@@ -13,10 +13,14 @@ from django.views.generic import (
     TemplateView,
     UpdateView,
 )
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 from prefecture.consts import NUM_ALL_PREFECTURES
 from prefecture.forms import ReviewForm
 from prefecture.models import PREFECTURES_CODE, Prefecture, Review
+from prefecture.serializers import PrefectureSerializer
 
 
 class HomeView(TemplateView):
@@ -149,3 +153,13 @@ def mypage_view(request):
             "prefecture_colour_data": prefecture_colour_data,
         },
     )
+
+
+@api_view(['GET'])
+def prefecture_list(request):
+    prefectures = Prefecture.objects.filter(user=request.user)
+    serializer = PrefectureSerializer(prefectures, many=True)
+    if request.method == 'GET':
+        return Response(serializer.data)
+    else:
+        Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
